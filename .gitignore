@@ -1,0 +1,20 @@
+# 忽略常用缓存
+*.pkl
+*.log
+
+# 忽略 VSCode 设置
+.vscode/
+
+# 忽略数据与工作目录
+data/
+demo/
+jobs/*/work_dirs/
+jobs/*/*.txt
+work_dirs/
+
+# 忽略模型结果、日志等备份文件（相对路径写法）
+gallery_detections.pkl
+gallery_features.pkl
+map_38_10_top1_82_01.pkl
+probe_features.pkl
+jobs/*/train_log.txt

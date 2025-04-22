@@ -1,0 +1,67 @@
+ninja_required_version = 1.3
+cxx = c++
+nvcc = /usr/local/cuda-11.5/bin/nvcc
+
+cflags = -pthread -B /home/gpu/anaconda3/envs/dicl_o/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -DMMCV_WITH_CUDA -I/data/zhy/DICL/mmcv/mmcv/ops/csrc -I/home/gpu/anaconda3/envs/dicl_o/lib/python3.8/site-packages/torch/include -I/home/gpu/anaconda3/envs/dicl_o/lib/python3.8/site-packages/torch/include/torch/csrc/api/include -I/home/gpu/anaconda3/envs/dicl_o/lib/python3.8/site-packages/torch/include/TH -I/home/gpu/anaconda3/envs/dicl_o/lib/python3.8/site-packages/torch/include/THC -I/usr/local/cuda-11.5/include -I/home/gpu/anaconda3/envs/dicl_o/include/python3.8 -c
+post_cflags = -DTORCH_API_INCLUDE_EXTENSION_H '-DPYBIND11_COMPILER_TYPE="_gcc"' '-DPYBIND11_STDLIB="_libstdcpp"' '-DPYBIND11_BUILD_ABI="_cxxabi1011"' -DTORCH_EXTENSION_NAME=_ext -D_GLIBCXX_USE_CXX11_ABI=0 -std=c++14
+cuda_cflags = -DMMCV_WITH_CUDA -I/data/zhy/DICL/mmcv/mmcv/ops/csrc -I/home/gpu/anaconda3/envs/dicl_o/lib/python3.8/site-packages/torch/include -I/home/gpu/anaconda3/envs/dicl_o/lib/python3.8/site-packages/torch/include/torch/csrc/api/include -I/home/gpu/anaconda3/envs/dicl_o/lib/python3.8/site-packages/torch/include/TH -I/home/gpu/anaconda3/envs/dicl_o/lib/python3.8/site-packages/torch/include/THC -I/usr/local/cuda-11.5/include -I/home/gpu/anaconda3/envs/dicl_o/include/python3.8 -c
+cuda_post_cflags = -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options ''"'"'-fPIC'"'"'' -DTORCH_API_INCLUDE_EXTENSION_H '-DPYBIND11_COMPILER_TYPE="_gcc"' '-DPYBIND11_STDLIB="_libstdcpp"' '-DPYBIND11_BUILD_ABI="_cxxabi1011"' -DTORCH_EXTENSION_NAME=_ext -D_GLIBCXX_USE_CXX11_ABI=0 -gencode=arch=compute_86,code=compute_86 -gencode=arch=compute_86,code=sm_86 -std=c++14
+ldflags = 
+
+rule compile
+  command = $cxx -MMD -MF $out.d $cflags -c $in -o $out $post_cflags
+  depfile = $out.d
+  deps = gcc
+
+rule cuda_compile
+  depfile = $out.d
+  deps = gcc
+  command = $nvcc  $cuda_cflags -c $in -o $out $cuda_post_cflags
+
+
+
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/bbox_overlaps.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/bbox_overlaps.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/bbox_overlaps_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/bbox_overlaps_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/box_iou_rotated.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/box_iou_rotated.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/box_iou_rotated_cpu.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/box_iou_rotated_cpu.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/box_iou_rotated_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/box_iou_rotated_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/carafe.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/carafe.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/carafe_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/carafe_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/carafe_naive.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/carafe_naive.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/carafe_naive_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/carafe_naive_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/cc_attention.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/cc_attention.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/cc_attention_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/cc_attention_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/corner_pool.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/corner_pool.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/deform_conv.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/deform_conv.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/deform_conv_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/deform_conv_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/deform_roi_pool.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/deform_roi_pool.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/deform_roi_pool_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/deform_roi_pool_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/focal_loss.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/focal_loss.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/focal_loss_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/focal_loss_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/info.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/info.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/masked_conv2d.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/masked_conv2d.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/masked_conv2d_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/masked_conv2d_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/modulated_deform_conv.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/modulated_deform_conv.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/modulated_deform_conv_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/modulated_deform_conv_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/nms.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/nms.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/nms_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/nms_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/nms_rotated.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/nms_rotated.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/nms_rotated_cpu.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/nms_rotated_cpu.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/nms_rotated_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/nms_rotated_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/psamask.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/psamask.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/psamask_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/psamask_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/pybind.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/pybind.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/roi_align.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/roi_align.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/roi_align_cpu.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/roi_align_cpu.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/roi_align_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/roi_align_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/roi_pool.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/roi_pool.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/roi_pool_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/roi_pool_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/sync_bn.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/sync_bn.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/sync_bn_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/sync_bn_cuda.cu
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/tin_shift.o: compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/tin_shift.cpp
+build /data/zhy/DICL/mmcv/build/temp.linux-x86_64-cpython-38/./mmcv/ops/csrc/pytorch/tin_shift_cuda.o: cuda_compile /data/zhy/DICL/mmcv/mmcv/ops/csrc/pytorch/tin_shift_cuda.cu
+
+
+
+
+
