@@ -1,6 +1,7 @@
 ## Introduction
 
-![alt text](resources/image.png)
+Optimizing Label Assignment for Weakly Supervised Person Search（AAAI 2025)
+
 
 ## Installation
 
