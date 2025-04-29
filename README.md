@@ -1,6 +1,6 @@
 ## Introduction
 
-![alt text](resources/image.png)
+![alt text](https://cdn.jsdelivr.net/gh/nothingtosay404/OL_PersonSearch@main/resources/image.png)
 
 ## Installation
 
