@@ -1,6 +1,6 @@
 ## Introduction
 
-![alt text](resources/{61BCA099-EA3C-4D51-BD17-091259F12311}.png)
+![alt text](resources/image.png)
 
 ## Installation
 
