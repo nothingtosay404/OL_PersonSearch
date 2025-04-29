@@ -1,6 +1,6 @@
 ## Introduction
 
-![alt text](https://cdn.jsdelivr.net/gh/nothingtosay404/OL_PersonSearch@main/resources/image.png?v=1)
+![alt text](https://jsd.cdn.zzko.cn/gh/nothingtosay404/OL_PersonSearch@main/resources/image.png)
 
 
 ## Installation
